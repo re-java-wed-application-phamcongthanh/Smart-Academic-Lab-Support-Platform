@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách buổi Mentoring - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-custom {
+            font-weight: 500;
+            color: #64748b !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(139, 92, 246, 0.08);
+        }
+
+        .page-header {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-table {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .table-custom th {
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #f1f5f9;
+            padding: 1rem;
+        }
+
+        .table-custom td {
+            padding: 1rem;
+            vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .badge-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+        }
+
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-approved {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-completed {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-rejected {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-action {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-approve {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .btn-approve:hover {
+            background-color: #15803d;
+            color: #fff;
+        }
+
+        .btn-reject {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-reject:hover {
+            background-color: #b91c1c;
+            color: #fff;
+        }
+
+        .btn-evaluate {
+            background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-evaluate:hover {
+            opacity: 0.9;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-logout-custom {
+            border-radius: 8px;
+        }
+
+        .page-title-custom {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform (Lecturer)
+            </a>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/dashboard"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/lecturer/mentoring"><i class="fa-solid fa-chalkboard-user me-1"></i> Quản lý Mentoring</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-danger btn-sm px-3 btn-logout-custom" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Alerts -->
+        <div th:if="${param.success_approve}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> Đã phê duyệt yêu cầu đặt lịch thành công!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.success_reject}" class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-info me-2"></i> Đã từ chối yêu cầu đặt lịch.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.success_evaluate}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> Đã hoàn tất đánh giá học thuật của sinh viên!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${param.error}">Lỗi xử lý</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="page-header">
+            <h1 class="fw-bold fs-2 mb-1 page-title-custom">Danh sách Đăng ký Mentoring</h1>
+            <p class="text-muted mb-0">Duyệt lịch hẹn mới đặt từ sinh viên hoặc thực hiện đánh giá sau mỗi buổi học thành công.</p>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card-table">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead>
+                        <tr>
+                            <th>Mã buổi</th>
+                            <th>Sinh viên đăng ký</th>
+                            <th>Ngày hẹn</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="session : ${sessions}">
+                            <td th:text="${'#MNT-' + session.id}">#MNT-1</td>
+                            <td>
+                                <div class="fw-semibold" th:text="${session.student.profile != null ? session.student.profile.fullName : session.student.username}">Sinh viên A</div>
+                                <small class="text-muted" th:text="${session.student.department != null ? session.student.department.name : 'Chung'}">CNTT</small>
+                            </td>
+                            <td th:text="${session.date}">2026-06-01</td>
+                            <td th:text="${session.startTime + ' - ' + session.endTime}">08:00 - 09:00</td>
+                            <td>
+                                <span th:if="${session.status == 'PENDING'}" class="badge-status badge-pending">Đang Chờ</span>
+                                <span th:if="${session.status == 'APPROVED'}" class="badge-status badge-approved">Đã Duyệt</span>
+                                <span th:if="${session.status == 'COMPLETED'}" class="badge-status badge-completed">Hoàn Thành</span>
+                                <span th:if="${session.status == 'REJECTED'}" class="badge-status badge-rejected">Từ Chối</span>
+                            </td>
+                            <td class="text-center">
+                                <!-- Trạng thái PENDING -> Cho phép Phê duyệt / Từ chối -->
+                                <div th:if="${session.status == 'PENDING'}" class="d-flex justify-content-center gap-2">
+                                    <a th:href="@{/lecturer/mentoring/approve/{id}(id=${session.id})}" class="btn-action btn-approve">
+                                        <i class="fa-solid fa-check me-1"></i> Duyệt
+                                    </a>
+                                    <a th:href="@{/lecturer/mentoring/reject/{id}(id=${session.id})}" class="btn-action btn-reject">
+                                        <i class="fa-solid fa-xmark me-1"></i> Từ chối
+                                    </a>
+                                </div>
+
+                                <!-- Trạng thái APPROVED -> Cho phép Đánh giá học thuật -->
+                                <a th:if="${session.status == 'APPROVED'}" 
+                                   th:href="@{/lecturer/mentoring/evaluate/{id}(id=${session.id})}" 
+                                   class="btn-action btn-evaluate">
+                                    <i class="fa-solid fa-star-half-stroke me-1"></i> Đánh giá
+                                </a>
+
+                                <span th:if="${session.status == 'COMPLETED'}" class="text-muted small">
+                                    <i class="fa-solid fa-circle-check text-success me-1"></i> Đã đánh giá
+                                </span>
+                                <span th:if="${session.status == 'REJECTED'}" class="text-muted small">Không hoạt động</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(sessions)}">
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có sinh viên nào đăng ký lịch hẹn với bạn.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách thiết bị - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-custom {
+            font-weight: 500;
+            color: #64748b !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(79, 70, 229, 0.08);
+        }
+
+        .page-header {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-new {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-new:hover {
+            color: #fff;
+            opacity: 0.95;
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .card-table {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .table-custom th {
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #f1f5f9;
+            padding: 1rem;
+        }
+
+        .table-custom td {
+            padding: 1rem;
+            vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .btn-action {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-edit:hover {
+            background-color: #cbd5e1;
+            color: #1e293b;
+        }
+
+        .btn-delete {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-delete:hover {
+            background-color: #b91c1c;
+            color: #fff;
+        }
+
+        .alert {
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-logout-custom {
+            border-radius: 8px;
+        }
+
+        .page-title-custom {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform (Admin)
+            </a>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/dashboard"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/admin/equipments"><i class="fa-solid fa-toolbox me-1"></i> Quản lý Thiết bị</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/admin/borrow"><i class="fa-solid fa-clipboard-list me-1"></i> Quản lý Mượn/Trả</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-danger btn-sm px-3 btn-logout-custom" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Error Alerts -->
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${param.error}">Lỗi xử lý</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h1 class="fw-bold fs-2 mb-1 page-title-custom">Danh sách Thiết Bị Phòng Lab</h1>
+                <p class="text-muted mb-0">Quản lý toàn bộ danh mục thiết bị thực hành phòng Lab của trung tâm học thuật.</p>
+            </div>
+            <a href="/admin/equipments/new" class="btn-new">
+                <i class="fa-solid fa-plus-circle me-1"></i> Thêm thiết bị mới
+            </a>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card-table">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead>
+                        <tr>
+                            <th>Mã thiết bị</th>
+                            <th>Tên thiết bị</th>
+                            <th>Tổng số lượng</th>
+                            <th>Còn sẵn trong kho</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="eq : ${equipments}">
+                            <td th:text="${eq.id}">1</td>
+                            <td class="fw-semibold" th:text="${eq.name}">Laptop Asus ROG</td>
+                            <td th:text="${eq.totalQuantity}">10</td>
+                            <td>
+                                <span class="fw-bold text-primary" th:text="${eq.availableQuantity}">10</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a th:href="@{/admin/equipments/edit/{id}(id=${eq.id})}" class="btn-action btn-edit">
+                                        <i class="fa-solid fa-pen-to-square me-1"></i> Sửa
+                                    </a>
+                                    <a th:href="@{/admin/equipments/delete/{id}(id=${eq.id})}" 
+                                       class="btn-action btn-delete" 
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa thiết bị này khỏi danh mục không?')">
+                                        <i class="fa-solid fa-trash-can me-1"></i> Xóa
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(equipments)}">
+                            <td colspan="5" class="text-center text-muted py-4">Chưa có thiết bị nào trong danh mục.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

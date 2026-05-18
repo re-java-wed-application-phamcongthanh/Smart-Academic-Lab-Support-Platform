@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin thiết bị - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-custom {
+            font-weight: 500;
+            color: #64748b !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(79, 70, 229, 0.08);
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 3rem;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-label-custom {
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control-custom {
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            color: #fff;
+            opacity: 0.95;
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-cancel {
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+        }
+
+        .alert-custom {
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-logout-custom {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform (Admin)
+            </a>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/dashboard"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/admin/equipments"><i class="fa-solid fa-toolbox me-1"></i> Quản lý Thiết bị</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/admin/borrow"><i class="fa-solid fa-clipboard-list me-1"></i> Quản lý Mượn/Trả</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-danger btn-sm px-3 btn-logout-custom" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="form-card">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-toolbox text-primary fs-1 mb-2"></i>
+                <h2 class="fw-bold mb-1" th:text="${equipment.id == null} ? 'Thêm thiết bị mới' : 'Cập nhật thiết bị'">Thông tin thiết bị</h2>
+                <p class="text-muted">Nhập thông tin chi tiết về số lượng thiết bị phòng Lab</p>
+            </div>
+
+            <!-- Error Notice -->
+            <div th:if="${error}" class="alert alert-danger alert-custom alert-dismissible fade show" role="alert">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${error}">Lỗi xử lý</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <form th:action="${equipment.id == null} ? @{/admin/equipments/save} : @{/admin/equipments/update/{id}(id=${equipment.id})}" 
+                  th:object="${equipment}" method="post">
+                
+                <!-- Tên thiết bị -->
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Tên thiết bị *</label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Nhập tên thiết bị" required>
+                </div>
+
+                <div class="row">
+                    <!-- Tổng số lượng -->
+                    <div class="col-md-6 mb-3">
+                        <label for="totalQuantity" class="form-label fw-semibold">Tổng số lượng *</label>
+                        <input type="number" class="form-control" id="totalQuantity" th:field="*{totalQuantity}" placeholder="Nhập tổng số" min="0" required>
+                    </div>
+
+                    <!-- Còn sẵn trong kho -->
+                    <div class="col-md-6 mb-4">
+                        <label for="availableQuantity" class="form-label fw-semibold">Số lượng sẵn có *</label>
+                        <input type="number" class="form-control" id="availableQuantity" th:field="*{availableQuantity}" placeholder="Nhập số lượng sẵn có" min="0" required>
+                    </div>
+                </div>
+
+                <!-- Nút thao tác -->
+                <div class="d-flex justify-content-between gap-3 mt-3">
+                    <a href="/admin/equipments" class="btn btn-light btn-cancel flex-fill border">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-submit flex-fill">Lưu thông tin <i class="fa-solid fa-save ms-1"></i></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

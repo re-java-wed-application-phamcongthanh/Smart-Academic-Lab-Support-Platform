@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt lịch Mentoring - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-custom {
+            font-weight: 500;
+            color: #64748b !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(79, 70, 229, 0.08);
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .btn-submit {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            color: #fff;
+            opacity: 0.95;
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-cancel {
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+        }
+
+        .alert-custom {
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-logout-custom {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform
+            </a>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/dashboard"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/student/mentoring"><i class="fa-solid fa-calendar-check me-1"></i> Đặt lịch hẹn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/student/borrow"><i class="fa-solid fa-toolbox me-1"></i> Mượn thiết bị</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/student/profile"><i class="fa-solid fa-id-card me-1"></i> Học bạ cá nhân</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-danger btn-sm px-3 btn-logout-custom" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="form-card">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-calendar-days text-primary fs-1 mb-2"></i>
+                <h2 class="fw-bold mb-1">Đặt lịch hẹn Mentoring</h2>
+                <p class="text-muted">Gặp gỡ Giảng viên hỗ trợ học thuật, thảo luận trực tiếp</p>
+            </div>
+
+            <!-- Error Notice -->
+            <div th:if="${error}" class="alert alert-danger alert-custom alert-dismissible fade show" role="alert">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${error}">Thông báo lỗi</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="alert alert-warning alert-custom" role="alert">
+                <i class="fa-solid fa-circle-info me-2"></i> <strong>Lưu ý:</strong> Buổi đặt lịch mentoring phải trước thời gian bắt đầu tối thiểu <strong>24 giờ</strong> để Giảng viên chuẩn bị nội dung thảo luận chu đáo.
+            </div>
+
+            <form th:action="@{/student/mentoring/save}" th:object="${booking}" method="post">
+                
+                <!-- Chọn giảng viên -->
+                <div class="mb-3">
+                    <label for="lecturerId" class="form-label fw-semibold">Chọn giảng viên hướng dẫn *</label>
+                    <select class="form-select" id="lecturerId" th:field="*{lecturerId}" required>
+                        <option value="">-- Chọn giảng viên --</option>
+                        <option th:each="lec : ${lecturers}" th:value="${lec.id}" 
+                                th:text="${(lec.profile != null ? lec.profile.fullName : lec.username) + ' - Khoa: ' + (lec.department != null ? lec.department.name : 'Chung')}">
+                            Giảng viên A
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Ngày hẹn -->
+                <div class="mb-3">
+                    <label for="date" class="form-label fw-semibold">Ngày hẹn gặp mặt *</label>
+                    <input type="date" class="form-control" id="date" th:field="*{date}" required>
+                </div>
+
+                <div class="row">
+                    <!-- Giờ bắt đầu -->
+                    <div class="col-md-6 mb-4">
+                        <label for="startTime" class="form-label fw-semibold">Giờ bắt đầu *</label>
+                        <input type="time" class="form-control" id="startTime" th:field="*{startTime}" required>
+                    </div>
+
+                    <!-- Giờ kết thúc -->
+                    <div class="col-md-6 mb-4">
+                        <label for="endTime" class="form-label fw-semibold">Giờ kết thúc *</label>
+                        <input type="time" class="form-control" id="endTime" th:field="*{endTime}" required>
+                    </div>
+                </div>
+
+                <!-- Nút thao tác -->
+                <div class="d-flex justify-content-between gap-3">
+                    <a href="/student/mentoring" class="btn btn-light btn-cancel flex-fill border">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-submit flex-fill">Xác nhận đặt lịch <i class="fa-solid fa-check ms-1"></i></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.88);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            padding: 2rem 1rem;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .register-card {
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 600px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .register-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-logo {
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .brand-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            opacity: 0.85;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 0.7rem 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.01);
+        }
+
+        .text-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .alert {
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-register-custom {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <!-- Logo and Header Title -->
+        <div class="brand-logo"><i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform</div>
+        <div class="brand-title">Đăng Ký Tài Khoản Học Viện</div>
+
+        <!-- Global Action Message -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-circle-exclamation me-2"></i> <span th:text="${error}">Lỗi xử lý hệ thống</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <form th:action="@{/register}" th:object="${user}" method="post">
+            <div class="row">
+                <!-- Username -->
+                <div class="col-md-6 mb-3">
+                    <label for="username" class="form-label font-weight-500">Tên tài khoản (Email) *</label>
+                    <input type="email" class="form-control" id="username" th:field="*{username}" placeholder="vidu@gmail.com" required>
+                    <div class="text-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Lỗi Username</div>
+                </div>
+
+                <!-- Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label font-weight-500">Mật khẩu *</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Tối thiểu 6 ký tự" required>
+                    <div class="text-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Lỗi Mật khẩu</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Họ và tên -->
+                <div class="col-md-6 mb-3">
+                    <label for="fullName" class="form-label font-weight-500">Họ và tên *</label>
+                    <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Nguyễn Văn A" required>
+                </div>
+
+                <!-- Lớp (Chỉ cho Student) -->
+                <div class="col-md-6 mb-3" id="classSection">
+                    <label for="studentClass" class="form-label font-weight-500">Lớp sinh hoạt *</label>
+                    <input type="text" class="form-control" id="studentClass" th:field="*{studentClass}" placeholder="Ví dụ: D19_CNPM01">
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Số điện thoại -->
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label font-weight-500">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="Nhập SĐT">
+                </div>
+
+                <!-- Địa chỉ -->
+                <div class="col-md-6 mb-3">
+                    <label for="address" class="form-label font-weight-500">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="Nhập địa chỉ">
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Role -->
+                <div class="col-md-6 mb-3">
+                    <label for="role" class="form-label font-weight-500">Bạn là? *</label>
+                    <select class="form-select" id="role" th:field="*{role}" onchange="toggleDepartmentDropdown()" required>
+                        <option value="STUDENT">Sinh viên (Student)</option>
+                        <option value="LECTURER">Giảng viên (Lecturer)</option>
+                        <option value="ADMIN">Quản trị viên (Admin)</option>
+                    </select>
+                </div>
+
+                <!-- Khoa/Ngành -->
+                <div class="col-md-6 mb-4" id="departmentSection">
+                    <label for="departmentId" class="form-label font-weight-500">Khoa / Ngành</label>
+                    <select class="form-select" id="departmentId" th:field="*{departmentId}">
+                        <option value="">-- Chọn khoa ngành của bạn --</option>
+                        <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3">Đăng ký ngay <i class="fa-solid fa-paper-plane ms-1"></i></button>
+
+            <div class="text-center mt-2">
+                <span class="text-muted">Đã có tài khoản?</span>
+                <a th:href="@{/login}" class="btn-register ms-1 text-decoration-none font-weight-500 btn-register-custom">Đăng nhập ngay</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleDepartmentDropdown() {
+            var roleSelect = document.getElementById("role");
+            var deptSection = document.getElementById("departmentSection");
+            var deptSelect = document.getElementById("departmentId");
+
+            if (roleSelect.value === "ADMIN") {
+                deptSection.style.display = "none";
+                deptSelect.value = ""; // Clear selection for Admin
+            } else {
+                deptSection.style.display = "block";
+            }
+        }
+        // Initialize logic on load
+        toggleDepartmentDropdown();
+    </script>
+</body>
+</html>

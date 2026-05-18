@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Mượn/Trả Thiết Bị - Smart Academic & Lab Support</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-custom {
+            font-weight: 500;
+            color: #64748b !important;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(79, 70, 229, 0.08);
+        }
+
+        .page-header {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-table {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .table-custom th {
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #f1f5f9;
+            padding: 1rem;
+        }
+
+        .table-custom td {
+            padding: 1rem;
+            vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .badge-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+        }
+
+        .badge-approved {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-returned {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .btn-action {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-return {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .btn-return:hover {
+            background-color: #15803d;
+            color: #fff;
+        }
+
+        .equipment-badge {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            margin: 0.15rem;
+            display: inline-block;
+        }
+
+        .alert {
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-logout-custom {
+            border-radius: 8px;
+        }
+
+        .page-title-custom {
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+                <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform (Admin)
+            </a>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/dashboard"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="/admin/equipments"><i class="fa-solid fa-toolbox me-1"></i> Quản lý Thiết bị</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/admin/borrow"><i class="fa-solid fa-clipboard-list me-1"></i> Quản lý Mượn/Trả</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-danger btn-sm px-3 btn-logout-custom" href="/logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Alerts -->
+        <div th:if="${param.success_return}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> Đã xác nhận hoàn trả thiết bị thành công! Số lượng khả dụng đã tự động cộng trả lại vào kho.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${param.error}">Lỗi xử lý</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="page-header">
+            <h1 class="fw-bold fs-2 mb-1 page-title-custom">Danh sách Mượn & Trả Thiết Bị</h1>
+            <p class="text-muted mb-0">Theo dõi trạng thái mượn thiết bị của sinh viên và duyệt hoàn trả lại kho phòng Lab.</p>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card-table">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead>
+                        <tr>
+                            <th>Mã phiếu</th>
+                            <th>Sinh viên mượn</th>
+                            <th>Ngày đăng ký</th>
+                            <th>Thiết bị mượn</th>
+                            <th>Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="record : ${records}">
+                            <td th:text="${'#BRW-' + record.id}">#BRW-1</td>
+                            <td>
+                                <div class="fw-semibold" th:text="${record.session.student.profile != null ? record.session.student.profile.fullName : record.session.student.username}">Sinh viên A</div>
+                                <small class="text-muted" th:text="${record.session.student.department != null ? record.session.student.department.name : 'Chung'}">CNTT</small>
+                            </td>
+                            <td th:text="${#temporary.format(record.requestDate, 'yyyy-MM-dd HH:mm')}" th:with="temporary=${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm')}">2026-05-18 10:00</td>
+                            <td>
+                                <div th:each="detail : ${record.details}" class="equipment-badge">
+                                    <span th:text="${detail.equipment.name + ' (x' + detail.quantity + ')'}">Thiết bị A (x1)</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:if="${record.status == 'APPROVED'}" class="badge-status badge-approved">Đang Mượn</span>
+                                <span th:if="${record.status == 'RETURNED'}" class="badge-status badge-returned">Đã Trả</span>
+                            </td>
+                            <td class="text-center">
+                                <!-- Đang mượn -> Cho phép Xác nhận trả -->
+                                <a th:if="${record.status == 'APPROVED'}" 
+                                   th:href="@{/admin/borrow/return/{id}(id=${record.id})}" 
+                                   class="btn-action btn-return" 
+                                   onclick="return confirm('Bạn có chắc chắn xác nhận sinh viên đã trả đầy đủ thiết bị này không?')">
+                                    <i class="fa-solid fa-rotate-left me-1"></i> Xác nhận trả
+                                </a>
+
+                                <span th:if="${record.status == 'RETURNED'}" class="text-muted small">
+                                    <i class="fa-solid fa-circle-check text-success me-1"></i> Đã hoàn thành
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(records)}">
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có lượt đăng ký mượn thiết bị nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
