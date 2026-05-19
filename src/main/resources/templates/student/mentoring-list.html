@@ -136,6 +136,11 @@
             color: #b91c1c;
         }
 
+        .badge-cancelled {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
         .alert-success {
             border-radius: 12px;
             margin-bottom: 1.5rem;
@@ -184,9 +189,17 @@
 
     <!-- Main Content -->
     <div class="container">
-        <!-- Success Alert -->
+        <!-- Alerts -->
         <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
             <i class="fa-solid fa-circle-check me-2"></i> Đặt lịch hẹn thành công! Đang chờ Giảng viên phê duyệt.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.success_cancel}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> Đã hủy lịch hẹn thành công! Slot thời gian trống đã được giải phóng để đặt lại.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${param.error}">Lỗi xử lý</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
@@ -211,6 +224,7 @@
                             <th>Ngày hẹn</th>
                             <th>Thời gian</th>
                             <th>Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -227,10 +241,21 @@
                                 <span th:if="${s.status == 'APPROVED'}" class="badge-status badge-approved">Đã Duyệt</span>
                                 <span th:if="${s.status == 'COMPLETED'}" class="badge-status badge-completed">Hoàn Thành</span>
                                 <span th:if="${s.status == 'REJECTED'}" class="badge-status badge-rejected">Từ Chối</span>
+                                <span th:if="${s.status == 'CANCELLED'}" class="badge-status badge-cancelled">Đã Hủy</span>
+                            </td>
+                            <td class="text-center">
+                                <a th:if="${s.status == 'PENDING' || s.status == 'APPROVED'}" 
+                                   th:href="@{/student/mentoring/cancel/{id}(id=${s.id})}" 
+                                   class="btn btn-outline-danger btn-sm border-2 fw-semibold px-2 py-1"
+                                   onclick="return confirm('Bạn có chắc chắn muốn hủy lịch hẹn này không? Lưu ý: Việc hủy lịch chỉ được thực hiện trước tối thiểu 24 giờ so với thời điểm hẹn.')"
+                                   style="border-radius: 8px; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-calendar-xmark me-1"></i> Hủy lịch
+                                </a>
+                                <span th:unless="${s.status == 'PENDING' || s.status == 'APPROVED'}" class="text-muted small">-</span>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(sessions)}">
-                            <td colspan="5" class="text-center text-muted py-4">Bạn chưa đăng ký lịch hẹn mentoring nào.</td>
+                            <td colspan="6" class="text-center text-muted py-4">Bạn chưa đăng ký lịch hẹn mentoring nào.</td>
                         </tr>
                     </tbody>
                 </table>

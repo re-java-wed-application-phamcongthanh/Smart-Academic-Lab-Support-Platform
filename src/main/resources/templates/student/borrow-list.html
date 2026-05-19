@@ -121,6 +121,16 @@
             color: #b91c1c;
         }
 
+        .badge-waiting {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+
+        .badge-issued {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
         .badge-returned {
             background-color: #dcfce7;
             color: #15803d;
@@ -218,18 +228,19 @@
                     <tbody>
                         <tr th:each="record : ${records}">
                             <td th:text="${'#BRW-' + record.id}">#BRW-1</td>
-                            <td th:text="${record.mentoringSession != null ? 'Buổi #' + record.mentoringSession.id : 'Ngoại khóa'}">Buổi #1</td>
-                            <td th:text="${record.borrowDate}">2026-06-01</td>
+                            <td th:text="${record.session != null ? 'Buổi #' + record.session.id : 'Ngoại khóa'}">Buổi #1</td>
+                            <td th:text="${#temporals.format(record.requestDate, 'yyyy-MM-dd HH:mm')}">2026-06-01</td>
                             <td>
                                 <div class="d-flex flex-wrap">
                                     <span class="device-pill" th:each="detail : ${record.details}" 
                                           th:text="${detail.equipment.name + ' (x' + detail.quantity + ')'}">
-                                        Laptop (x1)
+                                         Laptop (x1)
                                     </span>
                                 </div>
                             </td>
                             <td>
-                                <span th:if="${record.status == 'BORROWED'}" class="badge-status badge-borrowed">Đang mượn</span>
+                                <span th:if="${record.status == 'WAITING_FOR_ISSUANCE'}" class="badge-status badge-waiting">Chờ cấp phát</span>
+                                <span th:if="${record.status == 'ISSUED'}" class="badge-status badge-issued">Đang mượn</span>
                                 <span th:if="${record.status == 'RETURNED'}" class="badge-status badge-returned">Đã trả</span>
                             </td>
                         </tr>

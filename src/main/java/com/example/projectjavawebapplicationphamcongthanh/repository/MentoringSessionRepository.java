@@ -17,12 +17,14 @@ public interface MentoringSessionRepository extends JpaRepository<MentoringSessi
 
     List<MentoringSession> findByLecturerId(Long lecturerId);
 
+    List<MentoringSession> findByStudentIdAndStatus(Long studentId, String status);
+
     @Query("SELECT COUNT(m) > 0 FROM MentoringSession m " +
            "WHERE m.lecturer.id = :lecturerId " +
            "AND m.date = :date " +
            "AND m.startTime < :endTime " +
            "AND m.endTime > :startTime " +
-           "AND m.status != 'REJECTED'")
+           "AND m.status NOT IN ('REJECTED', 'CANCELLED')")
     boolean existsOverlappingSession(@Param("lecturerId") Long lecturerId,
                                       @Param("date") LocalDate date,
                                       @Param("startTime") LocalTime startTime,

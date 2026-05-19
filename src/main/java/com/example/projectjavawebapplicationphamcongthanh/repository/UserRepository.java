@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
            "p.fullName, p.phone, d.name, " +
            "COUNT(m), AVG(CAST(e.score as double))) " +
            "FROM User u " +
-           "JOIN u.profile p " +
+           "LEFT JOIN u.profile p " +
            "LEFT JOIN u.department d " +
            "LEFT JOIN MentoringSession m ON m.student.id = u.id AND m.status = 'COMPLETED' " +
            "LEFT JOIN AcademicEvaluation e ON e.session.id = m.id " +

@@ -105,6 +105,11 @@
             color: #15803d;
         }
 
+        .badge-waiting {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
         .btn-action {
             font-size: 0.85rem;
             font-weight: 600;
@@ -123,6 +128,17 @@
 
         .btn-return:hover {
             background-color: #15803d;
+            color: #fff;
+        }
+
+        .btn-issue {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .btn-issue:hover {
+            background-color: #0369a1;
             color: #fff;
         }
 
@@ -189,6 +205,10 @@
             <i class="fa-solid fa-circle-check me-2"></i> Đã xác nhận hoàn trả thiết bị thành công! Số lượng khả dụng đã tự động cộng trả lại vào kho.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <div th:if="${param.success_issue}" class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> Xác nhận cấp phát & xuất kho thành công! Hệ thống đã trừ lùi số lượng khả dụng trong kho phòng Lab.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
             <i class="fa-solid fa-triangle-exclamation me-2"></i> <span th:text="${param.error}">Lỗi xử lý</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -227,12 +247,21 @@
                                 </div>
                             </td>
                             <td>
-                                <span th:if="${record.status == 'APPROVED'}" class="badge-status badge-approved">Đang Mượn</span>
+                                <span th:if="${record.status == 'WAITING_FOR_ISSUANCE'}" class="badge-status badge-waiting">Chờ cấp phát</span>
+                                <span th:if="${record.status == 'ISSUED'}" class="badge-status badge-approved">Đang Mượn</span>
                                 <span th:if="${record.status == 'RETURNED'}" class="badge-status badge-returned">Đã Trả</span>
                             </td>
                             <td class="text-center">
+                                <!-- Chờ cấp phát -> Nút xuất kho -->
+                                <a th:if="${record.status == 'WAITING_FOR_ISSUANCE'}" 
+                                   th:href="@{/admin/borrow/issue/{id}(id=${record.id})}" 
+                                   class="btn-action btn-issue" 
+                                   onclick="return confirm('Xác nhận xuất kho thực tế cho thiết bị này?')">
+                                    <i class="fa-solid fa-truck-ramp-box me-1"></i> Xuất kho
+                                </a>
+
                                 <!-- Đang mượn -> Cho phép Xác nhận trả -->
-                                <a th:if="${record.status == 'APPROVED'}" 
+                                <a th:if="${record.status == 'ISSUED'}" 
                                    th:href="@{/admin/borrow/return/{id}(id=${record.id})}" 
                                    class="btn-action btn-return" 
                                    onclick="return confirm('Bạn có chắc chắn xác nhận sinh viên đã trả đầy đủ thiết bị này không?')">

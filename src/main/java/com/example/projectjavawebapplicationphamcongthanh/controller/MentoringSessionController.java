@@ -63,6 +63,18 @@ public class MentoringSessionController {
         return "redirect:/student/mentoring?success";
     }
 
+    @GetMapping("/student/mentoring/cancel/{id}")
+    public String cancel(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        User student = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
+        try {
+            mentoringSessionService.cancelSession(id, student.getId());
+        } catch (CustomValidationException e) {
+            return "redirect:/student/mentoring?error=" + java.net.URLEncoder.encode(e.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+        }
+        return "redirect:/student/mentoring?success_cancel";
+    }
+
     // --- LECTURER VIEW & APPROVAL ---
 
     @GetMapping("/lecturer/mentoring")

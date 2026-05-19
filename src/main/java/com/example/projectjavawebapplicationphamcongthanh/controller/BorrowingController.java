@@ -100,8 +100,18 @@ public class BorrowingController {
         try {
             borrowingService.returnEquipment(id);
         } catch (CustomValidationException e) {
-            return "redirect:/admin/borrow?error=" + e.getMessage();
+            return "redirect:/admin/borrow?error=" + java.net.URLEncoder.encode(e.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
         }
         return "redirect:/admin/borrow?success_return";
+    }
+
+    @GetMapping("/admin/borrow/issue/{id}")
+    public String issueRecord(@PathVariable("id") Long id) {
+        try {
+            borrowingService.confirmIssuance(id);
+        } catch (CustomValidationException e) {
+            return "redirect:/admin/borrow?error=" + java.net.URLEncoder.encode(e.getMessage(), java.nio.charset.StandardCharsets.UTF_8);
+        }
+        return "redirect:/admin/borrow?success_issue";
     }
 }

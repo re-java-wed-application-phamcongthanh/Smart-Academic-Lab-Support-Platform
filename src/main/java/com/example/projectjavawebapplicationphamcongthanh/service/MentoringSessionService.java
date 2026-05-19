@@ -112,4 +112,24 @@ public class MentoringSessionService {
         session.setStatus("COMPLETED");
         mentoringSessionRepository.save(session);
     }
+
+    @Transactional
+    public void cancelSession(Long id, Long studentId) {
+        MentoringSession session = getById(id);
+        if (!session.getStudent().getId().equals(studentId)) {
+            throw new CustomValidationException("Bạn không có quyền hủy lịch hẹn này!");
+        }
+        if (!"PENDING".equals(session.getStatus()) && !"APPROVED".equals(session.getStatus())) {
+            throw new CustomValidationException("Chỉ có thể hủy lịch hẹn ở trạng thái Đang chờ (PENDING) hoặc Đã duyệt (APPROVED)!");
+        }
+
+        // Kiểm tra điều kiện 24 giờ trước giờ hẹn
+        LocalDateTime sessionStart = LocalDateTime.of(session.getDate(), session.getStartTime());
+        if (sessionStart.isBefore(LocalDateTime.now().plusHours(24))) {
+            throw new CustomValidationException("Bạn chỉ được phép hủy lịch hẹn trước tối thiểu 24 giờ!");
+        }
+
+        session.setStatus("CANCELLED");
+        mentoringSessionRepository.save(session);
+    }
 }

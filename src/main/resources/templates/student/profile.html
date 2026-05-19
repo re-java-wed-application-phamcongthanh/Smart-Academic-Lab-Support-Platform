@@ -69,7 +69,7 @@
             padding: 3rem;
             margin-top: 3rem;
             margin-bottom: 3rem;
-            max-width: 800px;
+            max-width: 950px;
             margin-left: auto;
             margin-right: auto;
             position: relative;
@@ -179,14 +179,21 @@
 
     <!-- Main Content -->
     <div class="container">
+        
+        <!-- Success Update Alert -->
+        <div th:if="${param.success_update}" class="alert alert-success alert-dismissible fade show mt-4" role="alert" style="max-width: 950px; margin-left: auto; margin-right: auto; border-radius: 16px;">
+            <i class="fa-solid fa-circle-check me-2"></i> Cập nhật thông tin cá nhân thành công!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="profile-card">
             <div class="profile-header">
                 <div class="avatar-circle">
-                    <span th:text="${#strings.substring(profile.studentName != null ? profile.studentName : 'U', 0, 1).toUpperCase()}">S</span>
+                    <span th:text="${#strings.isEmpty(profile.studentName) ? 'U' : #strings.substring(profile.studentName, 0, 1).toUpperCase()}">S</span>
                 </div>
                 <div class="profile-info">
-                    <h2 th:text="${profile.studentName != null ? profile.studentName : 'Chưa có họ tên'}">Tên sinh viên</h2>
-                    <p class="text-muted mb-0"><i class="fa-solid fa-building-columns me-1"></i> Khoa/Ngành: <strong th:text="${profile.departmentName != null ? profile.departmentName : 'Chưa cập nhật'}">Khoa CNTT</strong></p>
+                    <h2 th:text="${not #strings.isEmpty(profile.studentName) ? profile.studentName : 'Chưa có họ tên'}">Tên sinh viên</h2>
+                    <p class="text-muted mb-0"><i class="fa-solid fa-building-columns me-1"></i> Khoa/Ngành: <strong th:text="${not #strings.isEmpty(profile.departmentName) ? profile.departmentName : 'Chưa cập nhật'}">Khoa CNTT</strong></p>
                 </div>
             </div>
 
@@ -214,15 +221,111 @@
                 <h5 class="fw-bold mb-3"><i class="fa-solid fa-user-tag me-2 text-primary"></i> Thông tin liên hệ</h5>
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <span class="text-muted">Số điện thoại:</span>
-                        <div class="fw-semibold mt-1" th:text="${profile.phone != null && profile.phone != '' ? profile.phone : 'Chưa có'}">Chưa cập nhật</div>
+                        <span class="text-muted">Họ và tên:</span>
+                        <div class="fw-semibold mt-1" th:text="${rawProfile != null ? rawProfile.fullName : 'Chưa cập nhật'}">Chưa cập nhật</div>
                     </div>
                     <div class="col-sm-6">
-                        <span class="text-muted">Vai trò tài khoản:</span>
-                        <div class="fw-semibold mt-1 text-primary">SINH VIÊN (STUDENT)</div>
+                        <span class="text-muted">Email liên hệ:</span>
+                        <div class="fw-semibold mt-1" th:text="${rawProfile != null ? rawProfile.email : 'Chưa cập nhật'}">Chưa cập nhật</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-muted">Số điện thoại:</span>
+                        <div class="fw-semibold mt-1" th:text="${rawProfile != null && rawProfile.phone != '' ? rawProfile.phone : 'Chưa có'}">Chưa cập nhật</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-muted">Địa chỉ:</span>
+                        <div class="fw-semibold mt-1" th:text="${rawProfile != null && rawProfile.address != '' ? rawProfile.address : 'Chưa có'}">Chưa cập nhật</div>
                     </div>
                 </div>
             </div>
+
+            <!-- Form Chỉnh sửa thông tin cá nhân -->
+            <div class="mt-4">
+                <button class="btn btn-outline-primary btn-sm fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#editProfileCollapse" aria-expanded="false" aria-controls="editProfileCollapse" style="border-radius: 8px;">
+                    <i class="fa-solid fa-user-pen me-1"></i> Cập nhật thông tin cá nhân
+                </button>
+                
+                <div class="collapse mt-3" id="editProfileCollapse">
+                    <div class="card card-body border border-light shadow-sm rounded-4 bg-light p-4">
+                        <form th:action="@{/student/profile/update}" method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label small fw-semibold">Họ và tên *</label>
+                                    <input type="text" class="form-control form-control-sm" id="fullName" name="fullName" th:value="${rawProfile != null ? rawProfile.fullName : ''}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label small fw-semibold">Email liên hệ *</label>
+                                    <input type="email" class="form-control form-control-sm" id="email" name="email" th:value="${rawProfile != null ? rawProfile.email : ''}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label small fw-semibold">Số điện thoại</label>
+                                    <input type="text" class="form-control form-control-sm" id="phone" name="phone" th:value="${rawProfile != null ? rawProfile.phone : ''}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label small fw-semibold">Địa chỉ liên hệ</label>
+                                    <input type="text" class="form-control form-control-sm" id="address" name="address" th:value="${rawProfile != null ? rawProfile.address : ''}">
+                                </div>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button type="submit" class="btn btn-primary btn-sm px-4 fw-semibold" style="border-radius: 8px;">
+                                    Lưu thay đổi
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Học bạ học thuật chi tiết -->
+            <div class="mt-5 border-top pt-4">
+                <h4 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-book-bookmark me-2"></i> Học bạ cố vấn & Thiết bị liên kết</h4>
+                <p class="text-muted small">Chi tiết các buổi tư vấn hoàn thành, điểm số đánh giá, định hướng từ giảng viên và danh sách thiết bị phòng thí nghiệm đã mượn.</p>
+                
+                <div class="table-responsive mt-3">
+                    <table class="table table-hover align-middle border-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Lịch hẹn</th>
+                                <th>Giảng viên</th>
+                                <th>Điểm</th>
+                                <th>Nhận xét & Thiết bị liên kết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="h : ${historyList}">
+                                <td>
+                                    <div class="fw-semibold" th:text="${'#SES-' + h.sessionId}">#SES-1</div>
+                                    <small class="text-muted" th:text="${h.date}">2026-06-01</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold" th:text="${h.lecturerName}">Giảng viên A</div>
+                                    <small class="text-muted" th:text="${h.startTime + ' - ' + h.endTime}">08:00 - 09:00</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success px-2 py-1 text-white fw-bold" th:text="${h.score + ' / 10'}" style="font-size: 0.85rem; border-radius: 6px;">8.5 / 10</span>
+                                </td>
+                                <td>
+                                    <div class="small fw-semibold text-dark mb-1">Nhận xét:</div>
+                                    <p class="text-muted small mb-2 text-wrap" th:text="${h.comments}">Nội dung nhận xét.</p>
+                                    
+                                    <!-- Thiết bị mượn đi kèm -->
+                                    <div th:if="${not #lists.isEmpty(h.borrowedEquipments)}">
+                                        <div class="small fw-semibold text-primary mb-1"><i class="fa-solid fa-microscope me-1"></i> Thiết bị mượn đi kèm:</div>
+                                        <span th:each="equip : ${h.borrowedEquipments}" th:text="${equip}" class="badge bg-light text-dark border me-1 small mb-1" style="border-radius: 6px; font-weight: 500;">Thiết bị A (x1)</span>
+                                    </div>
+                                    <div th:if="${#lists.isEmpty(h.borrowedEquipments)}">
+                                        <span class="text-muted small italic"><i class="fa-solid fa-info me-1"></i> Không mượn thiết bị</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(historyList)}">
+                                <td colspan="4" class="text-center text-muted py-4">Chưa có lịch sử học bạ hoàn thành nào được ghi nhận.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
