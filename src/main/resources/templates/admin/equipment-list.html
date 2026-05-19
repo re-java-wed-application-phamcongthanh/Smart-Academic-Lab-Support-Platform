@@ -160,7 +160,9 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
+
             <a class="navbar-brand navbar-brand-custom" href="/dashboard">
+
                 <i class="fa-solid fa-graduation-cap me-2"></i>Smart Platform (Admin)
             </a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -217,19 +219,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="eq : ${equipments}">
-                            <td th:text="${eq.id}">1</td>
-                            <td class="fw-semibold" th:text="${eq.name}">Laptop Asus ROG</td>
-                            <td th:text="${eq.totalQuantity}">10</td>
+                        <tr th:each="equipment : ${equipments}">
+                            <td th:text="${equipment.id}">1</td>
+                            <td class="fw-semibold" th:text="${equipment.name}">Laptop Asus ROG</td>
+                            <td th:text="${equipment.totalQuantity}">10</td>
                             <td>
-                                <span class="fw-bold text-primary" th:text="${eq.availableQuantity}">10</span>
+                                <span class="fw-bold text-primary" th:text="${equipment.availableQuantity}">10</span>
                             </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a th:href="@{/admin/equipments/edit/{id}(id=${eq.id})}" class="btn-action btn-edit">
+                                    <a th:href="@{/admin/equipments/edit/{id}(id=${equipment.id})}" class="btn-action btn-edit">
                                         <i class="fa-solid fa-pen-to-square me-1"></i> Sửa
                                     </a>
-                                    <a th:href="@{/admin/equipments/delete/{id}(id=${eq.id})}" 
+                                    <a th:href="@{/admin/equipments/delete/{id}(id=${equipment.id})}" 
                                        class="btn-action btn-delete" 
                                        onclick="return confirm('Bạn có chắc chắn muốn xóa thiết bị này khỏi danh mục không?')">
                                         <i class="fa-solid fa-trash-can me-1"></i> Xóa

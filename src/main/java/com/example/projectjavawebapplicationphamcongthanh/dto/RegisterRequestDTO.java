@@ -18,15 +18,25 @@ public class RegisterRequestDTO {
     @NotBlank(message = "Họ và tên không được để trống")
     private String fullName;
 
-    @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không đúng định dạng")
     private String email;
 
     private String phone;
     private String address;
+    private String studentClass;
 
     @NotBlank(message = "Role không được để trống")
     private String role; // STUDENT, LECTURER, ADMIN
 
     private Long departmentId;
+
+    // Explicit getter and setter for studentClass to avoid Lombok hot-reload resolution issues
+    public String getStudentClass() {
+        return this.studentClass;
+    }
+
+    public void setStudentClass(String studentClass) {
+        this.studentClass = studentClass;
+    }
 }
+

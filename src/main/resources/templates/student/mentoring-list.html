@@ -214,19 +214,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="session : ${sessions}">
-                            <td th:text="${session.id}">1</td>
+                        <tr th:each="s : ${sessions}">
+                            <td th:text="${s.id}">1</td>
                             <td>
-                                <div class="fw-semibold" th:text="${session.lecturer.profile != null ? session.lecturer.profile.fullName : session.lecturer.username}">Giảng viên A</div>
-                                <small class="text-muted" th:text="${session.lecturer.department != null ? session.lecturer.department.name : 'Khoa học'}">Bộ môn</small>
+                                <div class="fw-semibold" th:text="${s.lecturer.profile != null ? s.lecturer.profile.fullName : s.lecturer.username}">Giảng viên A</div>
+                                <small class="text-muted" th:text="${s.lecturer.department != null ? s.lecturer.department.name : 'Khoa học'}">Bộ môn</small>
                             </td>
-                            <td th:text="${session.date}">2026-06-01</td>
-                            <td th:text="${session.startTime + ' - ' + session.endTime}">08:00 - 09:00</td>
+                            <td th:text="${s.date}">2026-06-01</td>
+                            <td th:text="${s.startTime + ' - ' + s.endTime}">08:00 - 09:00</td>
                             <td>
-                                <span th:if="${session.status == 'PENDING'}" class="badge-status badge-pending">Đang Chờ</span>
-                                <span th:if="${session.status == 'APPROVED'}" class="badge-status badge-approved">Đã Duyệt</span>
-                                <span th:if="${session.status == 'COMPLETED'}" class="badge-status badge-completed">Hoàn Thành</span>
-                                <span th:if="${session.status == 'REJECTED'}" class="badge-status badge-rejected">Từ Chối</span>
+                                <span th:if="${s.status == 'PENDING'}" class="badge-status badge-pending">Đang Chờ</span>
+                                <span th:if="${s.status == 'APPROVED'}" class="badge-status badge-approved">Đã Duyệt</span>
+                                <span th:if="${s.status == 'COMPLETED'}" class="badge-status badge-completed">Hoàn Thành</span>
+                                <span th:if="${s.status == 'REJECTED'}" class="badge-status badge-rejected">Từ Chối</span>
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(sessions)}">

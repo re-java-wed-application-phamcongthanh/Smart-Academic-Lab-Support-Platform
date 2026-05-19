@@ -37,6 +37,10 @@ public class AuthService {
             throw new RuntimeException("Vai trò không hợp lệ!");
         }
 
+        if (role == Role.ADMIN) {
+            throw new RuntimeException("Không được phép đăng ký tài khoản Quản trị viên (Admin)!");
+        }
+
         Department department = null;
         if (dto.getDepartmentId() != null) {
             department = departmentRepository.findById(dto.getDepartmentId())
@@ -52,9 +56,10 @@ public class AuthService {
                 .build();
 
         // Tạo UserProfile
+        String emailVal = (dto.getEmail() != null && !dto.getEmail().isBlank()) ? dto.getEmail() : dto.getUsername();
         UserProfile profile = UserProfile.builder()
                 .fullName(dto.getFullName())
-                .email(dto.getEmail())
+                .email(emailVal)
                 .phone(dto.getPhone())
                 .address(dto.getAddress())
                 .user(user)

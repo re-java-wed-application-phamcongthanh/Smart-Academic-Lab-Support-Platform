@@ -214,13 +214,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="record : ${records}">
+                        <tr th:each="record : ${records != null ? records : {}}">
                             <td th:text="${'#BRW-' + record.id}">#BRW-1</td>
                             <td>
                                 <div class="fw-semibold" th:text="${record.session.student.profile != null ? record.session.student.profile.fullName : record.session.student.username}">Sinh viên A</div>
                                 <small class="text-muted" th:text="${record.session.student.department != null ? record.session.student.department.name : 'Chung'}">CNTT</small>
                             </td>
-                            <td th:text="${#temporary.format(record.requestDate, 'yyyy-MM-dd HH:mm')}" th:with="temporary=${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm')}">2026-05-18 10:00</td>
+                            <td th:text="${#temporals.format(record.requestDate, 'yyyy-MM-dd HH:mm')}">2026-05-18 10:00</td>
                             <td>
                                 <div th:each="detail : ${record.details}" class="equipment-badge">
                                     <span th:text="${detail.equipment.name + ' (x' + detail.quantity + ')'}">Thiết bị A (x1)</span>

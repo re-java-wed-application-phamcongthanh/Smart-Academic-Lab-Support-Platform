@@ -125,12 +125,12 @@ INSERT INTO equipments (name, total_quantity, available_quantity) VALUES
 
 -- Thêm User: (Mật khẩu được băm sẵn bằng BCrypt cho chữ '123456')
 INSERT INTO users (username, password, role, department_id) VALUES 
-('phamcongt56@gmail.com', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'ADMIN', NULL),
-('admin1', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'ADMIN', NULL),
-('lecturer1', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'LECTURER', 1),
-('lecturer2', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'LECTURER', 2),
-('student1', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'STUDENT', 1),
-('student2', '$2a$10$EblZqNptyYvcLm/VwDCVAuIss46QOq1XJ8J.5W2P.qL1qQ.9Yp5L6', 'STUDENT', 2);
+('phamcongt56@gmail.com', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'ADMIN', NULL),
+('admin1', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'ADMIN', NULL),
+('lecturer1', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'LECTURER', 1),
+('lecturer2', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'LECTURER', 2),
+('student1', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'STUDENT', 1),
+('student2', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'STUDENT', 2);
 
 -- Thêm Hồ sơ User Profile
 INSERT INTO user_profiles (full_name, email, phone, address, user_id) VALUES 
@@ -152,7 +152,7 @@ INSERT INTO academic_evaluations (session_id, comments, score) VALUES
 
 -- Thêm Phiếu mượn
 INSERT INTO borrowing_records (session_id, status, request_date, issue_date) VALUES 
-(1, 'ISSUED', '2026-06-01 09:00:00', '2026-06-01 09:10:00');
+(1, 'APPROVED', '2026-06-01 09:00:00', '2026-06-01 09:10:00');
 
 -- Thêm Chi tiết Phiếu mượn (Giảm số lượng available trong thực tế)
 INSERT INTO borrowing_details (borrowing_record_id, equipment_id, quantity) VALUES 
