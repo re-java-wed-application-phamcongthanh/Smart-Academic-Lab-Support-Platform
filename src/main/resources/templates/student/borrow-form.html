@@ -178,17 +178,19 @@
                 <!-- Chọn buổi Mentoring -->
                 <div class="mb-4">
                     <label for="mentoringSessionId" class="form-label fw-semibold">Chọn buổi Mentoring liên quan *</label>
-                    <select class="form-select" id="mentoringSessionId" th:field="*{mentoringSessionId}" required>
+                    <select class="form-select" id="mentoringSessionId" th:field="*{sessionId}" required>
                         <option value="">-- Chọn buổi học --</option>
                         <option th:each="sess : ${sessions}" th:value="${sess.id}" 
-                                th:text="${'Buổi #' + sess.id + ' ngày ' + sess.date + ' với ' + (sess.lecturer.profile != null ? sess.lecturer.profile.fullName : sess.lecturer.username)}">
+                                th:text="${'Buổi #' + sess.id + ' ngày ' + sess.date + ' với ' + (sess.lecturer != null && sess.lecturer.profile != null ? sess.lecturer.profile.fullName : (sess.lecturer != null ? sess.lecturer.username : 'Chưa có'))}">
                             Buổi #1
                         </option>
                     </select>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('sessionId')}" th:errors="*{sessionId}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Danh sách thiết bị đăng ký mượn (Tối đa 3 loại thiết bị)</label>
+                    <div class="text-danger small mt-1 mb-2" th:if="${#fields.hasErrors('items')}" th:errors="*{items}"></div>
                     
                     <!-- Dòng thiết bị 1 -->
                     <div class="device-row">
@@ -197,15 +199,17 @@
                                 <label class="form-label small text-muted mb-1">Thiết bị #1</label>
                                 <select class="form-select" th:field="*{items[0].equipmentId}" title="Chọn thiết bị thứ nhất">
                                     <option value="">-- Chọn thiết bị --</option>
-                                    <option th:each="eq : ${equipments}" th:value="${eq.id}" 
-                                            th:text="${eq.name + ' (Kho: ' + eq.availableQuantity + '/' + eq.totalQuantity + ')'}">
+                                    <option th:each="equip : ${equipments}" th:value="${equip.id}" 
+                                            th:text="${equip.name + ' (Kho: ' + equip.availableQuantity + '/' + equip.totalQuantity + ')'}">
                                         Thiết bị
                                     </option>
                                 </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[0].equipmentId')}" th:errors="*{items[0].equipmentId}"></div>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label small text-muted mb-1">Số lượng mượn</label>
                                 <input type="number" class="form-control" th:field="*{items[0].quantity}" placeholder="Số lượng" min="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[0].quantity')}" th:errors="*{items[0].quantity}"></div>
                             </div>
                         </div>
                     </div>
@@ -217,15 +221,17 @@
                                 <label class="form-label small text-muted mb-1">Thiết bị #2</label>
                                 <select class="form-select" th:field="*{items[1].equipmentId}" title="Chọn thiết bị thứ hai">
                                     <option value="">-- Chọn thiết bị --</option>
-                                    <option th:each="eq : ${equipments}" th:value="${eq.id}" 
-                                            th:text="${eq.name + ' (Kho: ' + eq.availableQuantity + '/' + eq.totalQuantity + ')'}">
+                                    <option th:each="equip : ${equipments}" th:value="${equip.id}" 
+                                            th:text="${equip.name + ' (Kho: ' + equip.availableQuantity + '/' + equip.totalQuantity + ')'}">
                                         Thiết bị
                                     </option>
                                 </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[1].equipmentId')}" th:errors="*{items[1].equipmentId}"></div>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label small text-muted mb-1">Số lượng mượn</label>
                                 <input type="number" class="form-control" th:field="*{items[1].quantity}" placeholder="Số lượng" min="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[1].quantity')}" th:errors="*{items[1].quantity}"></div>
                             </div>
                         </div>
                     </div>
@@ -237,15 +243,17 @@
                                 <label class="form-label small text-muted mb-1">Thiết bị #3</label>
                                 <select class="form-select" th:field="*{items[2].equipmentId}" title="Chọn thiết bị thứ ba">
                                     <option value="">-- Chọn thiết bị --</option>
-                                    <option th:each="eq : ${equipments}" th:value="${eq.id}" 
-                                            th:text="${eq.name + ' (Kho: ' + eq.availableQuantity + '/' + eq.totalQuantity + ')'}">
+                                    <option th:each="equip : ${equipments}" th:value="${equip.id}" 
+                                            th:text="${equip.name + ' (Kho: ' + equip.availableQuantity + '/' + equip.totalQuantity + ')'}">
                                         Thiết bị
                                     </option>
                                 </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[2].equipmentId')}" th:errors="*{items[2].equipmentId}"></div>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label small text-muted mb-1">Số lượng mượn</label>
                                 <input type="number" class="form-control" th:field="*{items[2].quantity}" placeholder="Số lượng" min="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('items[2].quantity')}" th:errors="*{items[2].quantity}"></div>
                             </div>
                         </div>
                     </div>

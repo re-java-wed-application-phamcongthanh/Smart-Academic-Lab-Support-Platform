@@ -182,12 +182,14 @@
                             Giảng viên A
                         </option>
                     </select>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('lecturerId')}" th:errors="*{lecturerId}"></div>
                 </div>
 
                 <!-- Ngày hẹn -->
                 <div class="mb-3">
                     <label for="date" class="form-label fw-semibold">Ngày hẹn gặp mặt *</label>
                     <input type="date" class="form-control" id="date" th:field="*{date}" required>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
                 </div>
 
                 <div class="row">
@@ -195,12 +197,14 @@
                     <div class="col-md-6 mb-4">
                         <label for="startTime" class="form-label fw-semibold">Giờ bắt đầu *</label>
                         <input type="time" class="form-control" id="startTime" th:field="*{startTime}" required>
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
                     </div>
 
                     <!-- Giờ kết thúc -->
                     <div class="col-md-6 mb-4">
                         <label for="endTime" class="form-label fw-semibold">Giờ kết thúc *</label>
                         <input type="time" class="form-control" id="endTime" th:field="*{endTime}" required>
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}"></div>
                     </div>
                 </div>
 

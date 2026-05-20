@@ -236,6 +236,10 @@
                         <span class="text-muted">Địa chỉ:</span>
                         <div class="fw-semibold mt-1" th:text="${rawProfile != null && rawProfile.address != '' ? rawProfile.address : 'Chưa có'}">Chưa cập nhật</div>
                     </div>
+                    <div class="col-sm-6" th:if="${rawProfile != null && rawProfile.studentClass != null}">
+                        <span class="text-muted">Lớp sinh hoạt:</span>
+                        <div class="fw-semibold mt-1" th:text="${rawProfile.studentClass}">D19_CNPM01</div>
+                    </div>
                 </div>
             </div>
 

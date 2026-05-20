@@ -2,6 +2,7 @@ package com.example.projectjavawebapplicationphamcongthanh.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class RegisterRequestDTO {
     @NotBlank(message = "Role không được để trống")
     private String role; // STUDENT, LECTURER, ADMIN
 
+    @NotNull(message = "Khoa/Ngành không được bỏ trống!")
     private Long departmentId;
 
     // Explicit getter and setter for studentClass to avoid Lombok hot-reload resolution issues

@@ -234,7 +234,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="record : ${records != null ? records : {}}">
+                        <tr th:each="record : ${records != null ? records : T(java.util.Collections).emptyList()}">
                             <td th:text="${'#BRW-' + record.id}">#BRW-1</td>
                             <td>
                                 <div class="fw-semibold" th:text="${record.session.student.profile != null ? record.session.student.profile.fullName : record.session.student.username}">Sinh viên A</div>

@@ -8,10 +8,12 @@ import com.example.projectjavawebapplicationphamcongthanh.repository.EquipmentRe
 import com.example.projectjavawebapplicationphamcongthanh.repository.UserRepository;
 import com.example.projectjavawebapplicationphamcongthanh.service.BorrowingService;
 import com.example.projectjavawebapplicationphamcongthanh.service.MentoringSessionService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -50,8 +52,17 @@ public class BorrowingController {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
 
         // Học viên có thể mượn thiết bị cho các buổi mentoring được duyệt (APPROVED hoặc COMPLETED)
-        model.addAttribute("sessions", mentoringSessionService.getByStudent(student.getId()));
-        model.addAttribute("equipments", equipmentRepository.findAll());
+        java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.MentoringSession> sessions = mentoringSessionService.getByStudent(student.getId());
+        if (sessions == null) {
+            sessions = new java.util.ArrayList<>();
+        }
+        model.addAttribute("sessions", sessions);
+
+        java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.Equipment> equipments = equipmentRepository.findAll();
+        if (equipments == null) {
+            equipments = new java.util.ArrayList<>();
+        }
+        model.addAttribute("equipments", equipments);
 
         BorrowRequestDTO dto = new BorrowRequestDTO();
         dto.setItems(new ArrayList<>());
@@ -64,13 +75,65 @@ public class BorrowingController {
     }
 
     @PostMapping("/student/borrow/save")
-    public String saveBorrow(@ModelAttribute("borrowRequest") BorrowRequestDTO dto,
+    public String saveBorrow(@Valid @ModelAttribute("borrowRequest") BorrowRequestDTO dto,
+                             BindingResult result,
                              Model model,
                              @AuthenticationPrincipal UserDetails userDetails) {
         User student = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên"));
 
-        // Lọc bỏ các dòng chọn thiết bị trống (không chọn thiết bị hoặc số lượng trống/bằng 0)
+        // Validate các dòng thiết bị
+        boolean hasAtLeastOneRow = false;
+        boolean hasRowErrors = false;
+        if (dto.getItems() != null) {
+            for (int i = 0; i < dto.getItems().size(); i++) {
+                BorrowItemDTO item = dto.getItems().get(i);
+                boolean hasEq = item.getEquipmentId() != null;
+                boolean hasQty = item.getQuantity() != null;
+
+                if (hasEq || hasQty) {
+                    if (!hasEq) {
+                        result.rejectValue("items[" + i + "].equipmentId", "error.items.equipmentId", "Vui lòng chọn thiết bị");
+                        hasRowErrors = true;
+                    }
+                    if (!hasQty) {
+                        result.rejectValue("items[" + i + "].quantity", "error.items.quantity", "Vui lòng nhập số lượng");
+                        hasRowErrors = true;
+                    } else if (item.getQuantity() <= 0) {
+                        result.rejectValue("items[" + i + "].quantity", "error.items.quantity", "Số lượng mượn phải lớn hơn 0");
+                        hasRowErrors = true;
+                    }
+
+                    if (hasEq && hasQty && item.getQuantity() > 0) {
+                        hasAtLeastOneRow = true;
+                    }
+                }
+            }
+        }
+
+        if (!hasRowErrors && !hasAtLeastOneRow && !result.hasErrors()) {
+            result.rejectValue("items", "error.items", "Danh sách thiết bị mượn không được để trống!");
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("error", "Đăng ký mượn thiết bị không thành công. Vui lòng kiểm tra lại thông tin!");
+            
+            java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.MentoringSession> sessions = mentoringSessionService.getByStudent(student.getId());
+            if (sessions == null) {
+                sessions = new java.util.ArrayList<>();
+            }
+            model.addAttribute("sessions", sessions);
+
+            java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.Equipment> equipments = equipmentRepository.findAll();
+            if (equipments == null) {
+                equipments = new java.util.ArrayList<>();
+            }
+            model.addAttribute("equipments", equipments);
+            
+            return "student/borrow-form";
+        }
+
+        // Lọc bỏ các dòng chọn thiết bị trống (đã được xác định là hoàn toàn trống ở trên)
         if (dto.getItems() != null) {
             dto.getItems().removeIf(item -> item.getEquipmentId() == null || item.getQuantity() == null || item.getQuantity() <= 0);
         }
@@ -78,9 +141,35 @@ public class BorrowingController {
         try {
             borrowingService.createBorrowing(dto);
         } catch (CustomValidationException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("sessions", mentoringSessionService.getByStudent(student.getId()));
-            model.addAttribute("equipments", equipmentRepository.findAll());
+            String msg = e.getMessage();
+            if (msg.contains("Buổi mentoring")) {
+                result.rejectValue("sessionId", "error.sessionId", msg);
+            } else if (msg.contains("thiết bị mượn")) {
+                result.rejectValue("items", "error.items", msg);
+            } else {
+                model.addAttribute("error", msg);
+            }
+            
+            java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.MentoringSession> sessions = mentoringSessionService.getByStudent(student.getId());
+            if (sessions == null) {
+                sessions = new java.util.ArrayList<>();
+            }
+            model.addAttribute("sessions", sessions);
+
+            java.util.List<com.example.projectjavawebapplicationphamcongthanh.entity.Equipment> equipments = equipmentRepository.findAll();
+            if (equipments == null) {
+                equipments = new java.util.ArrayList<>();
+            }
+            model.addAttribute("equipments", equipments);
+
+            // Đảm bảo list items luôn có đủ 3 phần tử để hiển thị lại trên form sau khi đã lọc
+            if (dto.getItems() == null) {
+                dto.setItems(new ArrayList<>());
+            }
+            while (dto.getItems().size() < 3) {
+                dto.getItems().add(new BorrowItemDTO());
+            }
+
             return "student/borrow-form";
         }
 

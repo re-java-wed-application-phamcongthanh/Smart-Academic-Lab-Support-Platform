@@ -48,6 +48,7 @@ public class MentoringSessionController {
                               Model model,
                               @AuthenticationPrincipal UserDetails userDetails) {
         if (result.hasErrors()) {
+            model.addAttribute("error", "Đăng ký đặt lịch không thành công. Vui lòng kiểm tra và sửa các lỗi nhập liệu bên dưới!");
             model.addAttribute("lecturers", userRepository.findByRole(Role.LECTURER));
             return "student/booking-form";
         }
@@ -56,7 +57,19 @@ public class MentoringSessionController {
         try {
             mentoringSessionService.createSession(student.getId(), dto);
         } catch (CustomValidationException e) {
-            model.addAttribute("error", e.getMessage());
+            String msg = e.getMessage();
+            if (msg.contains("24 giờ") || msg.contains("Ngày")) {
+                result.rejectValue("date", "error.date", msg);
+            } else if (msg.contains("bắt đầu") || msg.contains("kết thúc") || msg.contains("Thời gian")) {
+                result.rejectValue("startTime", "error.startTime", msg);
+            } else if (msg.contains("trùng") || msg.contains("Trùng") || msg.contains("lịch hẹn khác")) {
+                result.rejectValue("startTime", "error.startTime", msg);
+                model.addAttribute("error", msg);
+            } else if (msg.contains("Giảng viên")) {
+                result.rejectValue("lecturerId", "error.lecturerId", msg);
+            } else {
+                model.addAttribute("error", msg);
+            }
             model.addAttribute("lecturers", userRepository.findByRole(Role.LECTURER));
             return "student/booking-form";
         }

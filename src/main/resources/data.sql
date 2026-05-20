@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS user_profiles (
     email VARCHAR(100) NOT NULL UNIQUE,
     phone VARCHAR(15),
     address VARCHAR(255),
+    student_class VARCHAR(50),
     user_id BIGINT NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -133,13 +134,13 @@ INSERT INTO users (username, password, role, department_id) VALUES
 ('student2', '$2a$10$Bes5I3mr.JZeyMqar9LyZeLSzPZmtWKGgynloHFu9xwE50kCw8La.', 'STUDENT', 2);
 
 -- Thêm Hồ sơ User Profile
-INSERT INTO user_profiles (full_name, email, phone, address, user_id) VALUES 
-('Quản trị viên Hệ thống', 'phamcongt56@gmail.com', '0123456789', 'Hà Nội', 1),
-('Quản trị viên Hệ thống', 'admin@smartplatform.com', '0123456789', 'Hà Nội', 2),
-('Giảng viên Nguyễn Văn A', 'lecturer1@smartplatform.com', '0987654321', 'Hà Nội', 3),
-('Giảng viên Trần Thị B', 'lecturer2@smartplatform.com', '0987654322', 'TP.HCM', 4),
-('Sinh viên Phạm Công Thành', 'student1@smartplatform.com', '0345678901', 'Đà Nẵng', 5),
-('Sinh viên Lê Văn D', 'student2@smartplatform.com', '0345678902', 'Cần Thơ', 6);
+INSERT INTO user_profiles (full_name, email, phone, address, student_class, user_id) VALUES 
+('Quản trị viên Hệ thống', 'phamcongt56@gmail.com', '0123456789', 'Hà Nội', NULL, 1),
+('Quản trị viên Hệ thống', 'admin@smartplatform.com', '0123456789', 'Hà Nội', NULL, 2),
+('Giảng viên Nguyễn Văn A', 'lecturer1@smartplatform.com', '0987654321', 'Hà Nội', NULL, 3),
+('Giảng viên Trần Thị B', 'lecturer2@smartplatform.com', '0987654322', 'TP.HCM', NULL, 4),
+('Sinh viên Phạm Công Thành', 'student1@smartplatform.com', '0345678901', 'Đà Nẵng', 'D19_CNPM01', 5),
+('Sinh viên Lê Văn D', 'student2@smartplatform.com', '0345678902', 'Cần Thơ', 'D19_CNPM02', 6);
 
 -- Thêm Lịch hẹn (Mentoring Session)
 INSERT INTO mentoring_sessions (student_id, lecturer_id, date, start_time, end_time, status) VALUES 

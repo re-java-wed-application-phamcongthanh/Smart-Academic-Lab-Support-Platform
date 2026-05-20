@@ -157,12 +157,14 @@
                 <div class="col-md-6 mb-3">
                     <label for="fullName" class="form-label font-weight-500">Họ và tên *</label>
                     <input type="text" class="form-control" id="fullName" th:field="*{fullName}" placeholder="Nguyễn Văn A" required>
+                    <div class="text-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Lỗi Họ tên</div>
                 </div>
 
                 <!-- Lớp (Chỉ cho Student) -->
                 <div class="col-md-6 mb-3" id="classSection">
                     <label for="studentClass" class="form-label font-weight-500">Lớp sinh hoạt *</label>
                     <input type="text" class="form-control" id="studentClass" th:field="*{studentClass}" placeholder="Ví dụ: D19_CNPM01">
+                    <div class="text-error" th:if="${#fields.hasErrors('studentClass')}" th:errors="*{studentClass}">Lỗi Lớp sinh hoạt</div>
                 </div>
             </div>
 
@@ -171,6 +173,7 @@
                 <div class="col-md-6 mb-3">
                     <label for="phone" class="form-label font-weight-500">Số điện thoại</label>
                     <input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="Nhập SĐT">
+                    <div class="text-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Lỗi Số điện thoại</div>
                 </div>
 
                 <!-- Địa chỉ -->
@@ -192,11 +195,12 @@
 
                 <!-- Khoa/Ngành -->
                 <div class="col-md-6 mb-4" id="departmentSection">
-                    <label for="departmentId" class="form-label font-weight-500">Khoa / Ngành</label>
-                    <select class="form-select" id="departmentId" th:field="*{departmentId}">
+                    <label for="departmentId" class="form-label font-weight-500">Khoa / Ngành *</label>
+                    <select class="form-select" id="departmentId" th:field="*{departmentId}" required>
                         <option value="">-- Chọn khoa ngành của bạn --</option>
                         <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.name}"></option>
                     </select>
+                    <div class="text-error" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}">Lỗi Khoa/Ngành</div>
                 </div>
             </div>
 

@@ -168,16 +168,16 @@
                 <div class="row g-2">
                     <div class="col-sm-6">
                         <span class="text-muted">Sinh viên:</span>
-                        <div class="fw-semibold" th:text="${session.student.profile != null ? session.student.profile.fullName : session.student.username}">Sinh viên A</div>
+                        <div class="fw-semibold" th:text="${mentoringSession.student != null and mentoringSession.student.profile != null ? mentoringSession.student.profile.fullName : (mentoringSession.student != null ? mentoringSession.student.username : 'Không có thông tin')}">Sinh viên A</div>
                     </div>
                     <div class="col-sm-6">
                         <span class="text-muted">Ngày & Gi giờ hẹn:</span>
-                        <div class="fw-semibold" th:text="${session.date + ' (' + session.startTime + ' - ' + session.endTime + ')'}">2026-06-01 (08:00 - 09:00)</div>
+                        <div class="fw-semibold" th:text="${mentoringSession.date + ' (' + mentoringSession.startTime + ' - ' + mentoringSession.endTime + ')'}">2026-06-01 (08:00 - 09:00)</div>
                     </div>
                 </div>
             </div>
 
-            <form th:action="@{/lecturer/mentoring/evaluate/{id}(id=${session.id})}" method="post">
+            <form th:action="@{/lecturer/mentoring/evaluate/{id}(id=${mentoringSession.id})}" method="post">
                 
                 <!-- Cho điểm số -->
                 <div class="mb-3">

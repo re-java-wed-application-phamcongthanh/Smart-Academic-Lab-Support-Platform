@@ -27,6 +27,9 @@ public class UserProfile {
     @Column(length = 255)
     private String address;
 
+    @Column(name = "student_class", length = 50)
+    private String studentClass;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;

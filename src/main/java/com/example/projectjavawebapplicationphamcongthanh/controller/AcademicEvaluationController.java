@@ -33,7 +33,7 @@ public class AcademicEvaluationController {
         if (!"APPROVED".equals(session.getStatus())) {
             return "redirect:/lecturer/mentoring?error=" + java.net.URLEncoder.encode("Chỉ có thể đánh giá buổi hẹn đã phê duyệt (APPROVED)!", java.nio.charset.StandardCharsets.UTF_8);
         }
-        model.addAttribute("session", session);
+        model.addAttribute("mentoringSession", session);
         model.addAttribute("equipments", equipmentRepository.findAll());
         return "lecturer/evaluation-form";
     }
@@ -49,7 +49,7 @@ public class AcademicEvaluationController {
             academicEvaluationService.evaluateSession(id, comments, score, equipmentIds, quantities);
         } catch (CustomValidationException e) {
             MentoringSession session = mentoringSessionService.getById(id);
-            model.addAttribute("session", session);
+            model.addAttribute("mentoringSession", session);
             model.addAttribute("equipments", equipmentRepository.findAll());
             model.addAttribute("error", e.getMessage());
             return "lecturer/evaluation-form";

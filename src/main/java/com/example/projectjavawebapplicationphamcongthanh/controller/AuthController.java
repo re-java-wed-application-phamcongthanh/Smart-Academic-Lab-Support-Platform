@@ -39,13 +39,25 @@ public class AuthController {
                                BindingResult result,
                                Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("error", "Đăng ký không thành công. Vui lòng kiểm tra và sửa các lỗi nhập liệu bên dưới!");
             model.addAttribute("departments", departmentRepository.findAll());
             return "register";
         }
         try {
             authService.register(dto);
         } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
+            String msg = e.getMessage();
+            if (msg.contains("Số điện thoại")) {
+                result.rejectValue("phone", "error.phone", msg);
+            } else if (msg.contains("Tên đăng nhập")) {
+                result.rejectValue("username", "error.username", msg);
+            } else if (msg.contains("Lớp sinh hoạt")) {
+                result.rejectValue("studentClass", "error.studentClass", msg);
+            } else if (msg.contains("Khoa/Ngành")) {
+                result.rejectValue("departmentId", "error.departmentId", msg);
+            } else {
+                model.addAttribute("error", msg);
+            }
             model.addAttribute("departments", departmentRepository.findAll());
             return "register";
         }
